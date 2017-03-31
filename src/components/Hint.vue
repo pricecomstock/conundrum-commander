@@ -1,0 +1,54 @@
+<template>
+	<div class="field has-addons">
+	<!--<p class="control">
+		<span class="select">
+		<select>
+			<option>$</option>
+			<option>£</option>
+			<option>€</option>
+		</select>
+		</span>
+	</p>-->
+	<p class="control">
+		<input class="input" type="text" placeholder="Send a hint" v-model="hint" @keyup.enter="sendHint">
+	</p>
+	<p class="control">
+		<button :class="['button', classes]" @click="sendHint">
+			Send
+		</button>
+	</p>
+	</div>
+</template>
+
+<script>
+export default {
+	data() {
+		return {
+			hint: '',
+			loading: false
+		}
+	},
+	methods: {
+		sendHint() {
+			console.log('sent hint: ' + this.hint)
+			this.loading=true
+			setTimeout(() => {
+				this.loading = false
+				this.hint = ''
+			}, 700)
+		}
+	},
+	computed: {
+		classes() {
+			return {
+				'is-loading': this.loading,
+				'is-disabled': this.hint === ''
+			}
+		}
+	}
+}
+</script>
+
+<style>
+
+</style>
