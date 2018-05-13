@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import axios from '../axios-roomcontroller'
+import axios from '../axios-roommanager'
 export default {
 	data() {
 		return {

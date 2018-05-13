@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import axios from './axios-roomcontroller'
+  import axios from './axios-roommanager'
   import Room from './components/Room.vue'
   export default {
     name: 'app',
