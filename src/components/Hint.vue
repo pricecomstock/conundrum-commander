@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import axios from '../axios-roomcontroller'
 export default {
 	data() {
 		return {
@@ -30,12 +31,12 @@ export default {
 	},
 	methods: {
 		sendHint() {
-			console.log('sent hint: ' + this.hint)
 			this.loading=true
-			setTimeout(() => {
+			axios.post("/hint", {hint: this.hint})
+			.then( response => {
 				this.loading = false
 				this.hint = ''
-			}, 700)
+			})
 		}
 	},
 	computed: {

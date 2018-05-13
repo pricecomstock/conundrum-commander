@@ -1,7 +1,7 @@
 <template>
 	<div class="box">
-		<h1 class="title is-4">{{ roomName }}</h1>
-		<progress :class="['progress', 'is-small', statusColors]" :value="minutes*60 + seconds" :max="maxSeconds"></progress>
+		<h1 class="title is-4">{{ room.name }}</h1>
+		<progress :class="['progress', 'is-small', statusColors]" :value="room.secondsRemaining" :max="maxSeconds"></progress>
 		<div class="level">
 			<div class="level-left">
 				<div class="level-item">
@@ -33,25 +33,15 @@ import Hint from './Hint.vue'
 import Controls from './Controls.vue'
 export default {
 	props: {
-		roomName: {
-			type: String,
+		room: {
+			// type: Object,
 			required: true
-		},
-		startingMinutes: {
-			type: Number,
-			default: 60,
-			required: false
 		}
 	},
 	data () {
 		return {
-			msg: 'Welcome to Your Vue.js App',
-			minutes: 0,
-			seconds: 0,
-			maxSeconds: 0,
-			finished: false,
-			paused: false,
-			showDetails: false
+			startingMinutes: 60,
+			maxSeconds: 3600 // This should be provided by the room server as the central source of truth
 		}
 	},
 	methods: {
@@ -62,35 +52,18 @@ export default {
 	},
 	computed: {
 		timerString() {
-			return `${("00" + this.minutes).slice(-2)}:${("00" + this.seconds).slice(-2)}`;
+			return `${("00" + Math.floor(this.room.secondsRemaining / 60)).slice(-2)}:${("00" + (this.room.secondsRemaining % 60)).slice(-2)}`;
 		},
 		statusColors() {
 			return {
-				'is-success': this.minutes >= this.startingMinutes / 2 && !this.paused,
-				'is-warning': this.minutes < this.startingMinutes / 2 && this.minutes >= this.startingMinutes / 6 && !this.paused,
-				'is-danger': this.minutes < this.startingMinutes / 6 && !this.paused
+				'is-success': this.room.secondsRemaining >= this.maxSeconds / 2 && !this.paused,
+				'is-warning': this.room.secondsRemaining < this.maxSeconds / 2 && this.room.secondsRemaining >= this.maxSeconds / 6 && !this.paused,
+				'is-danger': this.room.secondsRemaining < this.maxSeconds / 6 && !this.paused
 			}
+		},
+		finished() {
+			return this.room.secondsRemaining === 0
 		}
-	},
-	created() {
-		this.minutes = this.startingMinutes
-		this.maxSeconds = this.startingMinutes * 60
-		var timer = setInterval( () => {
-			if (!this.paused) {
-				if (this.seconds === 0 && this.minutes === 0) {
-					this.finished = true;
-					clearInterval(timer);
-				} else if (this.seconds === 0) {
-					this.seconds = 59;
-					// this.seconds = 40;
-					this.minutes--;
-				} else {
-					this.seconds--;
-					// this.seconds -= 20;
-				}
-			}
-		}, 1000)
-
 	},
 	components: {
 		roomHint: Hint,

@@ -1,30 +1,31 @@
 <template>
   <div id="app" class="container">
-    <app-room v-for="room in rooms" :room-name="room.name" :starting-minutes="room.startingMinutes" :key="room.name"></app-room>
+    <!-- <app-room v-if="rooms" v-for="(room, index) in rooms" :room="room" :key="index"></app-room> -->
+    <app-room v-if="room != {}" :room="room"></app-room>
   </div>
 </template>
 
 <script>
+  import axios from './axios-roomcontroller'
   import Room from './components/Room.vue'
   export default {
     name: 'app',
+    created () {    
+      setInterval(() => {
+        axios.get(this.roomUrl)
+          .then( response => {
+            console.log(response)
+            this.room = response.data;
+          })
+      }, 1000)
+    },
     data () {
       return {
-        rooms: [
-          {
-            name: 'Saving Lincoln',
-            startingMinutes: 2
-          },
-          {
-            name: '20000 Leaks',
-            startingMinutes: 3
-          },
-          {
-            name: 'Tomb of Doom',
-            startingMinutes: 5
-          }
-        ],
-        msg: 'Welcome to Your Vue.js App'
+        roomUrl: '/room', // probably put this in a config file or something
+        // No wait, this is going to be served by a backend that should keep track of all rooms that are up.
+        // So, this should ping it's own backend to get a list of room addresses. 
+        // Actually maybe the backend should ping the rooms itself and then this only needs to ping its backend.
+        room: {}
       }
     },
     components: {
