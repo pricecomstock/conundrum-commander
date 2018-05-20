@@ -28,8 +28,8 @@ router.get('/', function(req, res) {
 });
 
 // Room list
-router.get('/roomlist', function(req, res) {
-    res.json(room.status);
+router.get('/rooms', function(req, res) {
+    res.json(roomManager.rooms);
 });
 
 // // Send hint
@@ -41,7 +41,7 @@ router.get('/roomlist', function(req, res) {
 // // Set Time
 // router.post('/settime', function(req, res) {
 //     room.secondsRemaining(req.body.secondsRemaining)
-//     res.json({success: true, room: room.status})
+//     res.json({success: true, room: room.roomStatus})
 // });
 
 // // Pause

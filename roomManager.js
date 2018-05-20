@@ -10,36 +10,36 @@ class RoomManager {
     constructor() {
         console.log(roomList)
         this._rooms = roomList.map( roomConfig => {
-            roomConfig.status = {online: false}
+            roomConfig.roomStatus = {online: false}
             return roomConfig
         })
 
         this.updateRooms()
     }
 
-    async updateRoom (room) {
-        console.log(room)
-        try {
-            const response = await axios.get(room.url + '/room')
-            room.status = response.data
-        } 
+    updateRoom (room) {
+        axios.get(room.url + '/room')
+        .then ( response => {
+            console.log(response.data)
+            room.roomStatus = response.data
+        }) 
         // timeout means a room is offline
-        catch(error) {
-            if (error.code == 'ECONNABORTED') {
-                room.status.online = false
+        .catch( error => {
+            if (error.code == 'ECONNABORTED' || error.code == 'ECONNREFUSED') {
+                room.roomStatus.online = false
             }
-        }
+        })
     }
 
     updateRooms () {
         this._rooms.forEach( room => {
             this.updateRoom(room)
         } )
-        this.printRooms()
+        console.log(this._rooms)
     }
 
-    printRooms() {
-        console.log(this._rooms)
+    get rooms () {
+        return this._rooms
     }
   }
 

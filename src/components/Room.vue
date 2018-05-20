@@ -1,7 +1,7 @@
 <template>
 	<div class="box">
 		<h1 class="title is-4">{{ room.name }}</h1>
-		<progress :class="['progress', 'is-small', statusColors]" :value="room.secondsRemaining" :max="maxSeconds"></progress>
+		<progress :class="['progress', 'is-small', statusColors]" :value="room.roomStatus.secondsRemaining" :max="maxSeconds"></progress>
 		<div class="level">
 			<div class="level-left">
 				<div class="level-item">
@@ -52,17 +52,17 @@ export default {
 	},
 	computed: {
 		timerString() {
-			return `${("00" + Math.floor(this.room.secondsRemaining / 60)).slice(-2)}:${("00" + (this.room.secondsRemaining % 60)).slice(-2)}`;
+			return `${("00" + Math.floor(this.room.roomStatus.secondsRemaining / 60)).slice(-2)}:${("00" + (this.room.roomStatus.secondsRemaining % 60)).slice(-2)}`;
 		},
 		statusColors() {
 			return {
-				'is-success': this.room.secondsRemaining >= this.maxSeconds / 2 && !this.paused,
-				'is-warning': this.room.secondsRemaining < this.maxSeconds / 2 && this.room.secondsRemaining >= this.maxSeconds / 6 && !this.paused,
-				'is-danger': this.room.secondsRemaining < this.maxSeconds / 6 && !this.paused
+				'is-success': this.room.roomStatus.secondsRemaining >= this.maxSeconds / 2 && !this.paused,
+				'is-warning': this.room.roomStatus.secondsRemaining < this.maxSeconds / 2 && this.room.roomStatus.secondsRemaining >= this.maxSeconds / 6 && !this.paused,
+				'is-danger': this.room.roomStatus.secondsRemaining < this.maxSeconds / 6 && !this.paused
 			}
 		},
 		finished() {
-			return this.room.secondsRemaining === 0
+			return this.room.roomStatus.secondsRemaining === 0
 		}
 	},
 	components: {
