@@ -20,7 +20,6 @@ class RoomManager {
     updateRoom (room) {
         axios.get(room.url + '/room')
         .then ( response => {
-            console.log(response.data)
             room.roomStatus = response.data
         }) 
         // timeout means a room is offline
@@ -35,11 +34,33 @@ class RoomManager {
         this._rooms.forEach( room => {
             this.updateRoom(room)
         } )
-        console.log(this._rooms)
+        // console.log(this._rooms)
     }
 
     get rooms () {
         return this._rooms
+    }
+
+    pauseRoom (roomName) {
+        let room = this._rooms.find( room => {
+            return room.name.toLowerCase() === roomName.toLowerCase()
+        })
+
+        if (room) {
+            return axios.get(`${room.url}/pause`)
+        }
+        // TODO: something should happen if the room isn't found
+    }
+    
+    playRoom (roomName) {
+        let room = this._rooms.find( room => {
+            return room.name.toLowerCase() === roomName.toLowerCase()
+        })
+
+        if (room) {
+            return axios.get(`${room.url}/play`)
+        }
+        // TODO: something should happen if the room isn't found
     }
   }
 

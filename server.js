@@ -32,6 +32,32 @@ router.get('/rooms', function(req, res) {
     res.json(roomManager.rooms);
 });
 
+// Pause
+router.post('/pause/:roomName', function(req, res) {
+    roomManager.pauseRoom(req.params.roomName)
+        .then(roomResult => {
+            console.log('Pause Response', roomResult.data)
+            res.json(roomResult.data);
+        })
+        .catch(error => {
+            console.log(error)
+            res.json({success: false, message: "connection error between manager and room"});
+        })
+});
+
+// Play
+router.post('/play/:roomName', function(req, res) {
+    roomManager.playRoom(req.params.roomName)
+        .then(roomResult => {
+            console.log('Play Response', roomResult.data)
+            res.json(roomResult.data);
+        })
+        .catch(error => {
+            console.log(error)
+            res.json({success: false, message: "connection error between manager and room"});
+        })
+});
+
 // // Send hint
 // router.post('/hint', function(req, res) {
 //     room.hint(req.body.hint);
